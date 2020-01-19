@@ -1,6 +1,9 @@
 const express = require("express");
 const pg = require("pg");
 
+const dotenv = require('dotenv');
+dotenv.config();
+
 const app = express();
 // configs come from standard PostgreSQL env vars
 // https://www.postgresql.org/docs/9.6/static/libpq-envars.html
@@ -10,18 +13,20 @@ const queryHandler = (req, res, next) => {
   pool
     .query(req.sqlQuery)
     .then(r => {
-      return res.json(r.rows || []);
+      const a = r.rows;
+      a.map(b => console.log(b))
+      //console.log('this is r.rows' + r.rows[1]);
+      return res.json(r.rows);
     })
     .catch(next);
 };
+
 
 app.get("/", (req, res) => {
   res.send("Welcome to EQ Works 😎");
 });
 
-app.get(
-  "/events/hourly",
-  (req, res, next) => {
+app.get("/events/hourly", (req, res, next) => {
     req.sqlQuery = `
     SELECT date, hour, events
     FROM public.hourly_events
