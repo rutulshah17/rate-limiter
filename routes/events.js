@@ -1,35 +1,30 @@
 var express = require('express');
 var router = express.Router();
-const pg = require('pg');
+var query = require ('../models/query');
 
-const pool = new pg.Pool()
 
-const queryHandler = (req, res, next) => {
-	pool.query(req.sqlQuery).then((r) => {
-        res.json(r.rows || [])
-	}).catch(next)
-}
-
+// "localhost:5555/events/hourly"
 router.get('/hourly', (req, res, next) => {
-    sqlQuery = `
-    SELECT date, hour, events
-    FROM public.hourly_events
-    ORDER BY date, hour
-    LIMIT 168`;
-    
-    pool.query(sqlQuery).then((r) => {
-        res.render( 'events', {results: r.rows || []})
-    })
-})
+	req.sqlQuery = `
+	SELECT date, hour, events
+	FROM public.hourly_events
+	ORDER BY date, hour
+	LIMIT 168`;
+	return next()
+	//res.render('events', {result: (query.queryHandler) } )
+}, query.queryHandler);
 
+
+// "localhost:5555/events/daily"
 router.get('/daily', (req, res, next) => {
 	req.sqlQuery = `
 		SELECT date, SUM(events) AS events
 		FROM public.hourly_events
 		GROUP BY date
 		ORDER BY date
-        LIMIT 7;`
+		LIMIT 7;`
 	return next()
-}, queryHandler)
+}, query.queryHandler);
+
 
 module.exports = router;

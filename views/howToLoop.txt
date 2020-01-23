@@ -1,3 +1,0 @@
-result[1].date => date
-result[1].hour => hour
-result[1].events => events
