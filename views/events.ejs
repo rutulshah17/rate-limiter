@@ -3,6 +3,11 @@
         Events Page
     </title>
     <body>
-        <h3> <%= results %> </h3>
+        <table>
+            <tr> Date </tr>
+            <% for (result in results) { %>
+                <tr>  <%= results[result].date %>  </tr>
+            <% } %>
+        </table>
     </body>
 </html>
