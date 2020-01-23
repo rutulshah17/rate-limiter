@@ -11,23 +11,20 @@ function gettrimmedUrl (url) {
 	return (tmp.pop());
 }
 
-date = [];
-event = [];
-	
+//needs to be updated
 function massageDataFromApi( results ) {
 	for(result in results) {
 		date.push(results[result].date);
 		event.push(results[result].events);
 	}
-	
 }
 
 module.exports = {
 	queryHandler: (req, res, next) => {
 		pool.query(req.sqlQuery).then((r) => {
 			//res.json(r.rows || [])
-			massageDataFromApi(r.rows);
-			res.render( gettrimmedUrl(req.baseUrl), { results: r.rows || []} )
+			console.log(massageDataFromApi(r.rows));
+			res.render( gettrimmedUrl(req.baseUrl), { results: r.rows || [] } )
 		}).catch(next)
 	}
 }
